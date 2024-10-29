@@ -1,6 +1,7 @@
 import * as keywords from "./keyword.mjs"
 import * as priority from "./priority.mjs"
 import * as cmd from "./cmd.mjs"
+import {callbackify} from "util"
 import * as Bot from "qq-official-bot"
 
 await priority.initPriority();
@@ -32,7 +33,8 @@ bot.on('message', (event) => {
 	console.log('收到消息:', event.message);
 
 	// 回复消息
-    const res = cmd.matchCmd(1, event.message[0].text);
+	const fn = callbackify(cmd.matchCmd);
+    const res = fn(1, event.message[0].text);
 	event.reply(res);
 });
 
